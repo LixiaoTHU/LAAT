@@ -278,7 +278,6 @@ def test(is_val, model, test_text_features, adversary, testloader, device, args)
                 loss_kl = criterion_kl(
                     F.log_softmax(logits_adv, dim=1), F.softmax(logits_clean, dim=1)
                 )
-                # loss = loss_clean + args.beta * loss_kl
                 loss_adv = loss_kl
             elif args.train_type == "TRADES-cos":
                 feat_adv = model[:-1](X_adv)
@@ -287,7 +286,6 @@ def test(is_val, model, test_text_features, adversary, testloader, device, args)
                 feat_clean = feat_clean / feat_clean.norm(dim=-1, keepdim=True)
                 feat_adv = feat_adv / feat_adv.norm(dim=-1, keepdim=True)
                 loss_kl = -torch.sum(feat_clean * feat_adv, dim=-1).mean()
-                # loss = loss_clean + args.beta * loss_kl
                 loss_adv = loss_kl
             else:
                 raise ValueError(args.train_type)
